@@ -21,7 +21,7 @@ public class FenetreGrilleMorceau extends JFrame implements ActionListener {
 
 	public void init() {
 		this.setSize(1000, 800);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		this.setContentPane(panMorceau);
 		this.getContentPane().add(panInterface);
@@ -32,11 +32,10 @@ public class FenetreGrilleMorceau extends JFrame implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		// rien encore
 	}
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		AccordNomFamille.creeCatalogueAccords();
 		FenetreGrilleMorceau fen;
 

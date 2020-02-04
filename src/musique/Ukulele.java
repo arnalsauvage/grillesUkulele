@@ -22,14 +22,14 @@ public class Ukulele {
 	// Cette méthode va chercher l'accord correspondant à une position
 	public Accord trouveAccordPosition(int a, int b, int c, int d) {
 		Note maNote;
-		int[] tabDegres;
+		Integer[] tabDegres;
 //		System.out.println("a : " + a + " b: " + b + " c:" + c + " d:" + d);
 		
 		if (a==-1 && b==-1 && c==-1 && d==-1)
 			return null;
 		
 		// On met les 4 notes dans un tableau pour les trier
-		ArrayList<Integer> notesJouees = new ArrayList<Integer>(4);
+		ArrayList<Integer> notesJouees = new ArrayList<>(4);
 		if (a >= 0)
 			notesJouees.add(corde1.noteDeLaFrette(a).getValeur());
 		if (b >= 0)
@@ -44,23 +44,22 @@ public class Ukulele {
 			return null;
 
 		// On supprime les doublons s'il y en a, du plus aigu vers le plus grave
-		if (notesJouees.size()> 3 && (notesJouees.get(3) == notesJouees.get(2)))
+		if (notesJouees.size()> 3 && (notesJouees.get(3).equals(notesJouees.get(2))))
 			notesJouees.remove(3);
-		if (notesJouees.size()> 2 && (notesJouees.get(2) == notesJouees.get(1)))
+		if (notesJouees.size()> 2 && (notesJouees.get(2).equals(notesJouees.get(1))))
 			notesJouees.remove(2);
-		if (notesJouees.size()> 1 &&notesJouees.get(1) == notesJouees.get(0))
+		if (notesJouees.size()> 1 &&notesJouees.get(1).equals( notesJouees.get(0)))
 			notesJouees.remove(1);
 
 		// On construit le tableau des degrés avec les notes qu'il reste
-		tabDegres = new int[notesJouees.size()];
+		tabDegres = new Integer[notesJouees.size()];
 		for (int i = 1; i < notesJouees.size(); i++)
 			tabDegres[i] = notesJouees.get(i) - notesJouees.get(0) + 1;
 		tabDegres[0] = 1;
 
 		// On construit l'accord et on le renvoie
 		maNote = new Note(notesJouees.get(0));
-		Accord monAccord = new Accord(maNote.getNomNote(), tabDegres);
-		return monAccord;
+		return (new Accord(maNote.getNomNote(), tabDegres));
 	}
 
 	// Méthode pour tester TrouveAccords
@@ -75,7 +74,7 @@ public class Ukulele {
 		bRetour = testeUnePositionDaccords(2, 2, 2, 5, "D", bAffichageConsole) && bRetour;
 		// Le ré7 hawaïen ne contient pas de Ré...
 		// bRetour = testeUnePositionDaccords(2,0,2,0,"D7",
-		// bAffichageConsole)&&bRetour;
+
 		bRetour = testeUnePositionDaccords(2, 2, 2, 3, "D7", bAffichageConsole) && bRetour;
 		bRetour = testeUnePositionDaccords(2, 2, 1, 0, "Dm", bAffichageConsole) && bRetour;
 		bRetour = testeUnePositionDaccords(1, 4, 0, 2, "E", bAffichageConsole) && bRetour;

@@ -1,11 +1,9 @@
 package vue;
 
-import java.awt.Color;
-import java.awt.Graphics;
-
-import javax.swing.JPanel;
-
 import musique.GrilleMorceau;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class FGMPanneauMorceau extends JPanel  {
 	private static final long serialVersionUID = 1L;
@@ -18,6 +16,7 @@ public class FGMPanneauMorceau extends JPanel  {
 		maGrille = new GrilleMorceau();
 	}
 
+	@Override
 	public void paintComponent(Graphics g) {
 		// Point de départ du dessin
 		int x = 10;
@@ -37,11 +36,11 @@ public class FGMPanneauMorceau extends JPanel  {
 	private void testeGrille(Graphics g, int accordsParLigne, int x, int y, int maTaillex, int maTailley) {
 		// On supprime les doubles espaces dans le texte des accords
 		while (texteAtraiter.contains("  "))
-			texteAtraiter = (texteAtraiter.replaceAll("  ", " "));
+			texteAtraiter = (texteAtraiter.replace("  ", " "));
 		if (texteAtraiter.length() > 2) {
 			maGrille.setAccords(texteAtraiter);
 			maGrille.transpose(transposition);
-			maGrille.AfficheMorceau(g, accordsParLigne, x, y, maTaillex, maTailley);
+			maGrille.afficheMorceau(g, accordsParLigne, x, y, maTaillex, maTailley);
 		}
 	}
 

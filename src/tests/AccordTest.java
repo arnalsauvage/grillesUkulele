@@ -14,7 +14,7 @@ public class AccordTest {
 	public void testEqualsSurAccordMajeur7() {
 		Accord monAccord;
 		NoteNom maNote;
-		int[] accordMajeur7 = { 1, 5, 8, 13 };
+		Integer[] accordMajeur7 = { 1, 5, 8, 13 };
 
 		maNote = new NoteNom("C");
 		monAccord = new Accord(maNote, accordMajeur7);
@@ -28,12 +28,12 @@ public class AccordTest {
 	public void testEqualsAccordMajeurDifferentDeAccordMajeur7() {
 		Accord monAccord;
 		NoteNom maNote;
-		int[] accordMajeur7 = { 1, 5, 8, 13 };
+		Integer[] accordMajeur7 = { 1, 5, 8, 13 };
 
 		maNote = new NoteNom("C");
 		monAccord = new Accord(maNote, accordMajeur7);
 
-		int[] autreAccord = { 1, 5, 8 }; // teste nb degrés différents
+		Integer[] autreAccord = { 1, 5, 8 }; // teste nb degrés différents
 		assertTrue(!monAccord.equals(autreAccord));
 	}
 
@@ -41,12 +41,12 @@ public class AccordTest {
 	public void testEqualsSurAccordDegresDifferents() {
 		Accord monAccord;
 		NoteNom maNote;
-		int[] accordMajeur7 = { 1, 5, 8, 13 };
+		Integer[] accordMajeur7 = { 1, 5, 8, 13 };
 
 		maNote = new NoteNom("C");
 		monAccord = new Accord(maNote, accordMajeur7);
 
-		int[] autreAccord2 = { 1, 3, 8, 13 };// teste degrés différents
+		Integer[] autreAccord2 = { 1, 3, 8, 13 };// teste degrés différents
 		assertTrue(!monAccord.equals(autreAccord2));
 	}
 
@@ -54,7 +54,7 @@ public class AccordTest {
 	public void testEqualsSurObjetNull() {
 		Accord monAccord;
 		NoteNom maNote;
-		int[] accordMajeur7 = { 1, 5, 8, 13 };
+		Integer[] accordMajeur7 = { 1, 5, 8, 13 };
 
 		maNote = new NoteNom("C");
 		monAccord = new Accord(maNote, accordMajeur7);
@@ -65,21 +65,21 @@ public class AccordTest {
 	
 	@Test
 	public void testCompareSurAccordA3degres() {
-		int[] accordMajeur7 = { 1, 5, 8, 13 };
+		Integer[] accordMajeur7 = { 1, 5, 8, 13 };
 		Accord monAccord;
 		NoteNom maNote;
 
 		maNote = new NoteNom("C");
 		monAccord = new Accord(maNote, accordMajeur7);
 
-		int[] autreAccord = { 1, 5, 8 };
+		Integer[] autreAccord = { 1, 5, 8 };
 		assertTrue(!monAccord.equals(autreAccord));
 	}
 	
 	
 	@Test
 	public void testCompareSurAccordA4degres() {
-		int[] accordMajeur7 = { 1, 5, 8, 13 };
+		Integer[] accordMajeur7 = { 1, 5, 8, 13 };
 		Accord monAccord;
 		NoteNom maNote;
 
@@ -93,20 +93,20 @@ public class AccordTest {
 	
 	@Test
 	public void testCompareSurAccord4degresDifferent() {
-		int[] accordMajeur7 = { 1, 5, 8, 13 };
+		Integer[] accordMajeur7 = { 1, 5, 8, 13 };
 		Accord monAccord;
 		NoteNom maNote;
 
 		maNote = new NoteNom("C");
 		monAccord = new Accord(maNote, accordMajeur7);
 
-		int[] autreAccord2 = { 1, 3, 8, 13 };
+		Integer[] autreAccord2 = { 1, 3, 8, 13 };
 		assertTrue(!monAccord.equals(autreAccord2));
 	}
 	
 	@Test
 	public void testCalculeNote() {
-		int[] accordMajeur7 = { 1, 5, 8, 13 };
+		Integer[] accordMajeur7 = { 1, 5, 8, 13 };
 		Accord monAccord;
 		NoteNom maNote;
 
@@ -116,10 +116,10 @@ public class AccordTest {
 		// Teste la méthode egale pour un accord identique à 4 degrés
 		assertTrue(monAccord.equals(accordMajeur7));
 
-		int[] autreAccord = { 1, 5, 8 };
+		Integer[] autreAccord = { 1, 5, 8 };
 		assertTrue(!monAccord.equals(autreAccord));
 
-		int[] autreAccord2 = { 1, 3, 8, 13 };
+		Integer[] autreAccord2 = { 1, 3, 8, 13 };
 		assertTrue(!monAccord.equals(autreAccord2));
 	}
 	
@@ -127,27 +127,27 @@ public class AccordTest {
 	public void testeChercheTypeAccord(){
 		AccordNomFamille.creeCatalogueAccords();
 		
-		int[] tabDegres = new int[] {1,4,8};
+		Integer[] tabDegres = new Integer[] {1,4,8};
 		Accord monAccord = new Accord(new NoteNom("C"), tabDegres);
 		assertEquals ("Cm", monAccord.nomAbrege());
 		
-		tabDegres = new int[] {1,4,8,10};
+		tabDegres = new Integer[] {1,4,8,10};
 		monAccord = new Accord(new NoteNom("C"), tabDegres);
-		assertTrue(monAccord.nomAbrege()!="Cm7");
+		assertEquals("Cm6", monAccord.nomAbrege());
 		
-		tabDegres = new int[] {1,4,8,11};
+		tabDegres = new Integer[] {1,4,8,11};
 		monAccord = new Accord(new NoteNom("C"), tabDegres);
 		assertEquals (monAccord.nomAbrege(),"Cm7");
 
-		tabDegres = new int[] {1,5,8,11};
+		tabDegres = new Integer[] {1,5,8,11};
 		monAccord = new Accord(new NoteNom("C"), tabDegres);
 		assertEquals (monAccord.nomAbrege(),"C7");
 
-		tabDegres = new int[] {1,5,8,10};
+		tabDegres = new Integer[] {1,5,8,10};
 		monAccord = new Accord(new NoteNom("C"), tabDegres);
 		assertEquals (monAccord.nomAbrege(),"C6");
 
-		tabDegres = new int[] {1,4,7,10};
+		tabDegres = new Integer[] {1,4,7,10};
 		monAccord = new Accord(new NoteNom("C"), tabDegres);
 		assertEquals (monAccord.nomAbrege(),"Cdim7");
 	}
@@ -157,38 +157,48 @@ public class AccordTest {
 	public  void testeAccordsMajeurs() {
 		Accord monAccord;
 		NoteNom maNote;
-		int [] tabNotes = {1,5,8,13};
+		Integer [] tabNotes = {1,5,8,13};
 		maNote = new NoteNom("C");
 		monAccord = new Accord(maNote,tabNotes);
-		assertEquals("Accord : C - C4 E4 G4 C5 \t", monAccord.toString());
+		monAccord.simplifie();
+		assertEquals("Accord : C - C4 E4 G4 \t", monAccord.toString());
 		maNote.monter(2);
 		monAccord = new Accord(maNote,tabNotes);
-		assertEquals("Accord : D - D4 F#4 A4 D5 \t", monAccord.toString());
+		monAccord.simplifie();
+		assertEquals("Accord : D - D4 F#4 A4 \t", monAccord.toString());
 		maNote.monter(2);
 		monAccord = new Accord(maNote,tabNotes);
-		assertEquals("Accord : E - E4 G#4 B4 E5 \t", monAccord.toString());
+		monAccord.simplifie();
+		assertEquals("Accord : E - E4 G#4 B4 \t", monAccord.toString());
 		maNote.monter(1);
 		monAccord = new Accord(maNote,tabNotes);
-		assertEquals("Accord : F - F4 A4 C5 F5 \t", monAccord.toString());
+		monAccord.simplifie();
+		assertEquals("Accord : F - F4 A4 C5 \t", monAccord.toString());
 		maNote.monter(2);
 		monAccord = new Accord(maNote,tabNotes);
-		assertEquals("Accord : G - G4 B4 D5 G5 \t", monAccord.toString());
+		monAccord.simplifie();
+		assertEquals("Accord : G - G4 B4 D5 \t", monAccord.toString());
 		maNote.monter(2);
 		monAccord = new Accord(maNote,tabNotes);
-		assertEquals("Accord : A - A4 C#5 E5 A5 \t", monAccord.toString());
+		monAccord.simplifie();
+		assertEquals("Accord : A - A4 C#5 E5 \t", monAccord.toString());
 		maNote.monter(2);
+		monAccord.simplifie();
 		monAccord = new Accord(maNote,tabNotes);
-		assertEquals("Accord : B - B4 D#5 F#5 B5 \t", monAccord.toString());
+		monAccord.simplifie();
+		assertEquals("Accord : B - B4 D#5 F#5 \t", monAccord.toString());
 		maNote.monter(1);
 		monAccord = new Accord(maNote,tabNotes);
-		assertEquals("Accord : C - C4 E4 G4 C5 \t", monAccord.toString());
+		monAccord.simplifie();
+		assertEquals("Accord : C - C4 E4 G4 \t", monAccord.toString());
 		
 		maNote = new NoteNom("Bb");
-		int[] tabNotes2 = {1,5,8};
+		Integer[] tabNotes2 = {1,5,8};
 		monAccord = new Accord(maNote,tabNotes2);
-		System.out.println("Nom abrege : "+ monAccord.nomAbrege() + monAccord);
 		assertEquals("Bb", monAccord.nomAbrege());
-		
+
+		monAccord = new Accord("Bb");
+		assertEquals("Bb", monAccord.nomAbrege());
 	}
 	
 	@Test
@@ -196,41 +206,41 @@ public class AccordTest {
 	public  void testeAccordsMineurs() {
 		Accord monAccord;
 		NoteNom maNote;
-		int [] tabNotes = {1,4,8,13};
-		maNote = new NoteNom("C");
+		Integer[] tabNotes = {1,4,8};
+		maNote = new NoteNom("Cm");
 		monAccord = new Accord(maNote,tabNotes);
-		assertEquals("Accord : Cm - C4 D#4 G4 C5 \t", monAccord.toString());
+		assertEquals("Accord : Cm - C4 D#4 G4 \t", monAccord.toString());
 		maNote.monter(2);
 		monAccord = new Accord(maNote,tabNotes);
-		assertEquals("Accord : Dm - D4 F4 A4 D5 \t", monAccord.toString());
+		assertEquals("Accord : Dm - D4 F4 A4 \t", monAccord.toString());
 		maNote.monter(2);
 		monAccord = new Accord(maNote,tabNotes);
-		assertEquals("Accord : Em - E4 G4 B4 E5 \t", monAccord.toString());
+		assertEquals("Accord : Em - E4 G4 B4 \t", monAccord.toString());
 		maNote.monter(1);
 		monAccord = new Accord(maNote,tabNotes);
-		assertEquals("Accord : Fm - F4 G#4 C5 F5 \t", monAccord.toString());
+		assertEquals("Accord : Fm - F4 G#4 C5 \t", monAccord.toString());
 		maNote.monter(2);
 		monAccord = new Accord(maNote,tabNotes);
-		assertEquals("Accord : Gm - G4 A#4 D5 G5 \t", monAccord.toString());
+		assertEquals("Accord : Gm - G4 A#4 D5 \t", monAccord.toString());
 		maNote.monter(2);
 		monAccord = new Accord(maNote,tabNotes);
-		assertEquals("Accord : Am - A4 C5 E5 A5 \t", monAccord.toString());
+		assertEquals("Accord : Am - A4 C5 E5 \t", monAccord.toString());
 		maNote.monter(1);
 		monAccord = new Accord(maNote,tabNotes);
-		assertEquals("Accord : A#m - A#4 C#5 F5 A#5 \t", monAccord.toString());
+		assertEquals("Accord : A#m - A#4 C#5 F5 \t", monAccord.toString());
 		maNote.monter(1);
 		monAccord = new Accord(maNote,tabNotes);
-		assertEquals("Accord : Bm - B4 D5 F#5 B5 \t", monAccord.toString());
+		assertEquals("Accord : Bm - B4 D5 F#5 \t", monAccord.toString());
 		maNote.monter(1);
 		monAccord = new Accord(maNote,tabNotes);
-		assertEquals("Accord : Cm - C4 D#4 G4 C5 \t", monAccord.toString());
+		assertEquals("Accord : Cm - C4 D#4 G4 \t", monAccord.toString());
 	}
 	
 	
 	@Test
 	public void testeRenverseAccord(){
 		
-		int [] accordMineur7 = {1,4,8,11};
+		Integer[] accordMineur7 = {1,4,8,11};
 
 		Accord monAccord;
 		NoteNom maNote = new NoteNom("A");
@@ -249,7 +259,7 @@ public class AccordTest {
 	public  void testeAccordsMineurs7() {
 		Accord monAccord;
 		NoteNom maNote;
-		int [] tabNotes = {1,4,8,11};
+		Integer[] tabNotes = {1,4,8,11};
 		maNote = new NoteNom("Cm7");
 		monAccord = new Accord(maNote,tabNotes);
 		assertEquals("Accord : Cm7;D#6 - C4 D#4 G4 A#4 \t", monAccord.toString());
@@ -284,7 +294,33 @@ public class AccordTest {
 		// Tests transposer
 		teste_Transposer(monAccord,2,"Dm7");
 	}
-	
+
+	@Test
+	public void testeSimplifie()
+	{
+		// C Eb G C ==> C Eb G
+		NoteNom maNote = new NoteNom("Cm7");
+		Accord monAccord = new Accord (maNote, new Integer[]{1, 4, 8, 13});
+		Accord monAccordSimplifie = new Accord (maNote, new Integer[]{1, 4, 8});
+		monAccord.simplifie();
+		assertEquals(monAccordSimplifie, monAccord);
+
+		// C Eb G  ==> C Eb G
+		 maNote = new NoteNom("Cm");
+		 monAccord = new Accord (maNote, new Integer[]{1, 4, 8});
+		 monAccord.simplifie();
+		 assertEquals(monAccordSimplifie, monAccord);
+
+		// C Eb G Bb C ==> C Eb G Bb
+		maNote = new NoteNom("C7");
+		monAccord = new Accord (maNote, new Integer[]{1, 5, 8, 11, 13});
+		monAccordSimplifie = new Accord (maNote, new Integer[]{1, 5, 8, 11});
+		monAccord.simplifie();
+		assertEquals(monAccordSimplifie, monAccord);
+
+	}
+
+
 	public static void teste_Transposer(Accord monAccord, int transpose, String resultat)
 	{
 		Accord autreAccord = new Accord(monAccord);

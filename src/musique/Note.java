@@ -42,13 +42,11 @@ public class Note{
 
 	public boolean setNom(String nomDeLaNote)
 	{	// la longueur de la chaîne doit être de 1 ou 2 (lettre + bémol ou dièse)
-		if ((nomDeLaNote.length()>0)&&(nomDeLaNote.length()<3)){
+		if ((nomDeLaNote.length()>0)&&(nomDeLaNote.length()<3)&&(nomDeLaNote.matches("[A-G]#?b?"))){
 			// On passe en majuscules, et on doit avoir une lettre de AàG et # ou B
-			if (nomDeLaNote.matches("[A-G]#?b?")){
 				this.nom.setNom(nomDeLaNote);
 				this.calculeNumero();
 				return true;
-			}
 		}
 		return false;
 	}
@@ -133,10 +131,12 @@ public class Note{
 		if (nom == null) {
 			if (other.nom != null)
 				return false;
-		} else if (!nom.equals(other.nom))
+		} else if (!nom.equals(other.nom)) {
 			return false;
-		if (octave != other.octave)
+		}
+		if (octave != other.octave) {
 			return false;
+		}
 		return true;
 	}
 }

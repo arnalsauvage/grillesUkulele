@@ -26,7 +26,6 @@ public class FGMPanneauInterface extends JPanel implements KeyListener, ActionLi
 	// Create a file chooser
 	private JButton choixOpenFic;
 	private JButton choixSaveFic;
-//	private JFileChooser fileChooser;
 
 	GrilleMorceau maGrille;
 
@@ -39,10 +38,8 @@ public class FGMPanneauInterface extends JPanel implements KeyListener, ActionLi
 		addKeyListener(this);
 
 		// Cheek to cheek
-		// texteGrille = new JTextArea(
 		// "F6 F Cdim Gm7-5 C7 F FM7 Dm Am7-5 D7 A# A#9 G#dim Gm7-5 F Am7-5 D7
-		// A#9 G#dim C7 C#9 C7 F Cdim C7", 5,
-		// 50);
+		// A#9 G#dim C7 C#9 C7 F Cdim C7",
 
 		// Hello Dolly
 		// Gestion du combo "transpose"
@@ -66,7 +63,7 @@ public class FGMPanneauInterface extends JPanel implements KeyListener, ActionLi
 		lblTranspose.setBounds(171, 47, 152, 27);
 		this.add(lblTranspose, "cell 6 1,alignx left,aligny center");
 
-		comboTranspose = new JComboBox<String>(transposeStrings);
+		comboTranspose = new JComboBox<>(transposeStrings);
 		comboTranspose.setBounds(246, 47, 126, 29);
 		comboTranspose.setSelectedItem(transposition);
 		this.add(comboTranspose, "cell 8 1,alignx left,aligny center");
@@ -81,7 +78,6 @@ public class FGMPanneauInterface extends JPanel implements KeyListener, ActionLi
 		// Gestion du bouton Open
 		choixOpenFic = new JButton("Ouvrir...");
 		choixOpenFic.setBounds(723, 11, 95, 42);
-		//choixOpenFic.setIcon((new ImageIcon(this.getClass().getResource("IncreaseIndent_16x16_JFX.png"))));
 		buttonGroup.add(choixOpenFic);
 		this.add(choixOpenFic, "flowx,cell 0 3,alignx left,aligny top");
 		choixOpenFic.addActionListener(this);
@@ -101,32 +97,30 @@ public class FGMPanneauInterface extends JPanel implements KeyListener, ActionLi
 		
 		choixSaveFic = new JButton("Enregistrer...");
 		choixSaveFic.setBounds(723, 65, 95, 36);
-		//choixSaveFic.setIcon(new ImageIcon(this.getClass().getResource("DecreaseIndent_16x16_JFX.png")));
 		this.add(choixSaveFic, "cell 0 3,alignx center,aligny top");
 		choixSaveFic.addActionListener(this);
-//		fileChooser = new JFileChooser();
-
 	}
 
 	public String lireFichierTexte(File fichier) {
-		String machaine = "";
+		StringBuilder machaine = new StringBuilder("");
 		// lecture du fichier texte
 		try {
-			InputStream ips = new FileInputStream(fichier);
-			InputStreamReader ipsr = new InputStreamReader(ips);
+			InputStreamReader ipsr;
+			try (InputStream ips = new FileInputStream(fichier)) {
+				ipsr = new InputStreamReader(ips);
+			}
 			BufferedReader br = new BufferedReader(ipsr);
 			String ligne;
 			titreGrille.setText(br.readLine());
 			while ((ligne = br.readLine()) != null) {
-				// System.out.println(ligne);
-				machaine += ligne + "\n";
+				machaine.append(ligne + "\n");
 			}
-			texteGrille.setText(machaine);
+			texteGrille.setText(machaine.toString());
 			br.close();
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
-		return machaine;
+		return machaine.toString();
 	}
 
 	public int sauveFichierTexte(File fichier) {
@@ -139,11 +133,13 @@ public class FGMPanneauInterface extends JPanel implements KeyListener, ActionLi
 			 * dans le fichier (append), on ne marque pas par dessus
 			 * 
 			 */
-			FileWriter fw = new FileWriter(fichier, true);
+			BufferedWriter output;
+			try (FileWriter fw = new FileWriter(fichier, true)) {
 
-			// le BufferedWriter output auquel on donne comme argument le
-			// FileWriter fw cree juste au dessus
-			BufferedWriter output = new BufferedWriter(fw);
+				// le BufferedWriter output auquel on donne comme argument le
+				// FileWriter fw cree juste au dessus
+				output = new BufferedWriter(fw);
+			}
 
 			// on marque dans le fichier ou plutot dans le BufferedWriter qui
 			// sert comme un tampon(stream)
@@ -173,12 +169,12 @@ public class FGMPanneauInterface extends JPanel implements KeyListener, ActionLi
 	public void actionPerformed(ActionEvent evt) {
 		if (evt.getSource() == boutonAfficheGrille) {
 			// on enlève les fioritures de la zone de texte avant de traiter
-			texteGrille.setText(texteGrille.getText().replaceAll("\n", " "));
-			texteGrille.setText(texteGrille.getText().replaceAll("\t", " "));
-			texteGrille.setText(texteGrille.getText().replaceAll(" /", "/"));
-			texteGrille.setText(texteGrille.getText().replaceAll("/ ", "/"));
+			texteGrille.setText(texteGrille.getText().replace("\n", " "));
+			texteGrille.setText(texteGrille.getText().replace("\t", " "));
+			texteGrille.setText(texteGrille.getText().replace(" /", "/"));
+			texteGrille.setText(texteGrille.getText().replace("/ ", "/"));
 			while (texteGrille.getText().contains("  "))
-				texteGrille.setText(texteGrille.getText().replaceAll("  ", " "));
+				texteGrille.setText(texteGrille.getText().replace("  ", " "));
 			panneauMorceau.setTexteAtraiter(texteGrille.getText());
 			panneauMorceau.repaint();
 		}
@@ -214,8 +210,6 @@ public class FGMPanneauInterface extends JPanel implements KeyListener, ActionLi
 				File file = choix.getSelectedFile();
 				// This is where a real application would open the file.
 				texteGrille.setText(lireFichierTexte(file));
-			} else {
-
 			}
 		}
 		if (evt.getSource() == choixSaveFic) {
@@ -233,8 +227,6 @@ public class FGMPanneauInterface extends JPanel implements KeyListener, ActionLi
 				File file = choix.getSelectedFile();
 				// This is where a real application would open the file.
 				sauveFichierTexte(file);
-			} else {
-
 			}
 		}
 		panneauMorceau.setTransposition(transposition);
@@ -254,41 +246,41 @@ public class FGMPanneauInterface extends JPanel implements KeyListener, ActionLi
 
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_F1) {
+			// Rien pour le moment
 		}
 		if (e.getKeyCode() == KeyEvent.VK_F2) {
-
+			// Rien pour le moment
 		}
 	}
 
 	public String reformateGrilleTexte(int nbAccordsParLigne) {
-		String retour = "";
-
+		StringBuilder retour = new StringBuilder("");
 		String entree = texteGrille.getText();
 
-		entree.replaceAll("\n", " ");
-		entree.replaceAll("\t", " ");
+		entree = entree.replace("\n", " ");
+		entree = entree.replace("\t", " ");
 		while (entree.contains("  "))
-			entree.replaceAll("  ", " ");
+			entree = entree.replace("  ", " ");
 
 		String[] tabAccords = entree.split(" ");
 
 		for (int parcours = 0; parcours != tabAccords.length; parcours++) {
 
 			if (((parcours + 1) % nbAccordsParLigne) == 0)
-				retour += tabAccords[parcours] + "\n";
+				retour.append (tabAccords[parcours] + "\n");
 			else
-				retour += tabAccords[parcours] + "\t";
-
+				retour.append (tabAccords[parcours] + "\t");
 		}
-
-		return retour;
+		return retour.toString();
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
+		// rien pour le moment, mais...
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
+		// rien pour le moment, mais...
 	}
 }

@@ -1,23 +1,22 @@
 package vue;
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.font.TextAttribute;
-import java.util.Hashtable;
-import java.util.Random;
 
 import musique.Accord;
 import musique.Position;
 import musique.Ukulele;
 
+import java.awt.*;
+import java.awt.font.TextAttribute;
+import java.util.HashMap;
+import java.util.Random;
+
 public class Diagramme {
 	private Graphics g;
-	private int maTaillex , maTailley, x , y;
-	
+	private int maTailley;
+	private int maTaillex ;
+	private int x;
+	private int y;
+	Random ran = new Random();
+
 	// Constructeur avec un objet graphique, des coordonnées et une taille
 	public Diagramme(Graphics g, int x, int y, int maTaillex, int maTailley){
 		setX (x);
@@ -26,11 +25,10 @@ public class Diagramme {
 		setMaTailley (maTailley);
 		this.g = g;
 	}
-	
+
 	// Cette méthode permet de randomiser une valeur
 	private int modifieur()
 	{
-		Random ran = new Random();
 		int result = ran.nextInt(14);
 
 		switch(result){
@@ -38,8 +36,8 @@ public class Diagramme {
 		case 1 : case 2 : return -maTailley/100;
 		case 6 : case 7: return maTailley/100;
 		case 8 : return 2*maTailley/100;
+		default: return 0;
 		}
-		return 0;
 	}
 	
 	// dessine la position sur un diagramme : grille, points, croix, nom
@@ -48,22 +46,20 @@ public class Diagramme {
 		Ukulele monuke;
 		monuke = new Ukulele();
 		Accord accordTrouve;
-		String NomAccord;
+		String nomAccord;
 
 		accordTrouve = monuke.trouveAccordPosition(maPosition.getCorde(1), maPosition.getCorde(2), maPosition.getCorde(3), maPosition.getCorde(4));
-		NomAccord = accordTrouve.chercheTypeAccord(false);
+		nomAccord = accordTrouve.chercheTypeAccord(false);
 		
-		dessine(maPosition, NomAccord);
+		dessine(maPosition, nomAccord);
 		
 	}
 	
 	// dessine la position sur un diagramme : grille, points, croix, nom
 	public void dessine(Position maPosition, Accord monAccord)
 	{
-			String nomAccord = monAccord.chercheTypeAccord(false);
-		
+		String nomAccord = monAccord.chercheTypeAccord(false);
 		dessine(maPosition, nomAccord);
-		
 	}
 	
 	// dessine la position sur un diagramme : grille, points, croix, nom
@@ -86,30 +82,20 @@ public class Diagramme {
 		this.dessineFretteDebut(fretteDebut);
 		
 	}
-	
-//	// dessine la position sur un diagramme : grille, points, croix, nom
-//		public void dessine(Position maPosition)
-//		{
-//			Ukulele monuke;
-//			monuke = new Ukulele();
-//			Accord accordTrouve;
-//
-//			accordTrouve = monuke.trouveAccordPosition(maPosition.getCorde(1), maPosition.getCorde(2), maPosition.getCorde(3), maPosition.getCorde(4));
-//			dessine (maPosition, accordTrouve);
-//		}
-		
+
 	// dessine une grille vierge pour le diagramme
 	private void dessinerGrilleVierge(){
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
 		BasicStroke bs;
-		bs = new BasicStroke(maTaillex/20,1,1,2);
+		bs = new BasicStroke(maTaillex/20f,1,1,2);
 		g2.setStroke(bs);
 		g2.setColor(Color.black);
 
 		// Dessin d'une grille de uku alambiquée
-		int col, ligne;
+		int col;
+		int ligne;
 		int tailleCaseX = maTaillex/3;
 		int tailleCaseY = maTailley/4;
 
@@ -118,12 +104,10 @@ public class Diagramme {
 		//				g2.drawRect(x + maTaillex / 3, y, maTaillex / 3,  maTailley);
 		//				g2.drawRect(x, y + maTailley / 4, maTaillex,  2 * maTailley / 4);
 		//				g2.drawRect(x, y + maTailley / 2, maTaillex, maTailley / 4);
-		//				
-
 
 		// Tableau x, y des 20 points de la grille du uku
-		int[] tableauX = new int[20];
-		int[] tableauY = new int[20];
+		Integer[] tableauX = new Integer[20];
+		Integer[] tableauY = new Integer[20];
 
 		// Les points seront déplacés à +- 2 pixels
 		for (col = 0;col<4;col++){
@@ -133,8 +117,10 @@ public class Diagramme {
 				tableauY[5*(col)+ligne] = (ligne)* tailleCaseY + y + modifieur();
 			}
 		}
-		int lx, ly;
-		int lx2, ly2;
+		int lx;
+		int ly;
+		int lx2;
+		int ly2;
 		for (col = 0;col<4;col++){
 			for (ligne = 0; ligne<5; ligne++)
 			{
@@ -173,14 +159,15 @@ public class Diagramme {
 		Font font = new Font("Serif", Font.PLAIN, maTailley);
 		Font font24 = font.deriveFont(18.0f*maTaillex/50);
 		g2.setFont(font24);
-		Hashtable<TextAttribute, Float> attributes = new Hashtable<TextAttribute, Float>();
+		HashMap<TextAttribute, Float> attributes = new HashMap<>();
 		attributes.put(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
 		Font font24bold = font24.deriveFont(attributes);
 		g2.setFont(font24bold);	
 		
 		// Pour centrer le texte
 		FontMetrics metrics = g.getFontMetrics(font24);
-		int posx, posy;
+		int posx;
+		int posy;
 		posx = this.x + (this.maTaillex - metrics.stringWidth(nom))/2;
 		posy = this.y - metrics.getAscent()/4;
 		
@@ -197,7 +184,7 @@ public class Diagramme {
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
 		BasicStroke bs;
-		bs = new BasicStroke(maTaillex/30,1,1,2);
+		bs = new BasicStroke(maTaillex/30f,1,1,2);
 		g2.setStroke(bs);
 		// Dessin d'une grille de uku
 		if (frette==-1){
@@ -218,13 +205,16 @@ public class Diagramme {
 	{
 		BasicStroke bs;
 
-		int monX1, monX2, monY1, monY2;
+		int monX1;
+		int monX2;
+		int monY1;
+		int monY2;
 		monX1 = x + maTaillex/3 * corde - maTaillex/12 + modifieur();
 		monY1 = y - maTailley/12 + modifieur();
 		monX2 = x + maTaillex/3 * corde + maTaillex/12 + modifieur();
 		monY2 = y + maTailley/12 + modifieur();
 
-		bs = new BasicStroke(maTaillex/20,1,1,2);
+		bs = new BasicStroke(maTaillex/20f,1,1,2);
 		g2.setStroke(bs);
 		g2.setColor(Color.black);
 		// Dessiner une diagonale avec un rectangle 
@@ -233,7 +223,7 @@ public class Diagramme {
 		// Dessiner une diagonale avec un rectangle 
 		g2.drawLine(monX2 , monY1, monX1, monY2);
 
-		bs = new BasicStroke(maTaillex/30,1,1,2);
+		bs = new BasicStroke(maTaillex/30f,1,1,2);
 		g2.setStroke(bs);
 		g2.setColor(Color.red);
 		// Dessiner une diagonale avec un rectangle 
@@ -258,7 +248,7 @@ public class Diagramme {
 
 		Font font24 = font.deriveFont(12.0f);
 		g2.setFont(font24);
-		Hashtable<TextAttribute, Float> attributes = new Hashtable<TextAttribute, Float>();
+		HashMap<TextAttribute, Float> attributes = new HashMap<>();
 		attributes.put(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
 		Font font24bold = font24.deriveFont(attributes);
 		g2.setFont(font24bold);

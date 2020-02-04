@@ -1,24 +1,23 @@
 package musique;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.util.ArrayList;
 import vue.Diagramme;
+
+import java.awt.*;
+import java.io.Serializable;
+import java.util.ArrayList;
 
 // TODO : ajouter la gestion du séparateur : /
 
-public class GrilleMorceau {
-	ArrayList<Accord> pileDeAccords;
+public class GrilleMorceau implements Serializable {
+	private static final long serialVersionUID = -1839185262852556231L;
+	private ArrayList<Accord> pileDeAccords;
 	Dico monDico;
 
 	// Constructeur par défaut
 	public GrilleMorceau() {
 		monDico = new Dico();
 		monDico.remplitDico();
-		pileDeAccords = new ArrayList<Accord>();
+		pileDeAccords = new ArrayList<>();
 	}
 
 	// Cette méthode permet de passer en paramètre une liste de noms d'accords
@@ -37,7 +36,7 @@ public class GrilleMorceau {
 	// Cette méthode permet de passer en paramètre une liste de noms d'accords
 	// à utiliser pour le morceau ex : "C Am7 F G7"
 	public void setAccords(String sAccords) {
-		pileDeAccords = new ArrayList<Accord>();
+		pileDeAccords = new ArrayList<>();
 		ajouteAccords(sAccords);
 	}
 
@@ -57,8 +56,8 @@ public class GrilleMorceau {
 	// retire le dernier accord de la pile et le renvoie
 	public Accord tireAccord() {
 		Accord monAccord = null;
-		if (pileDeAccords.size()>0){
-			monAccord = (Accord) pileDeAccords.get(pileDeAccords.size() - 1);
+		if (!pileDeAccords.isEmpty()){
+			monAccord = pileDeAccords.get(pileDeAccords.size() - 1);
 			pileDeAccords.remove(pileDeAccords.size() - 1);
 		}
 		return monAccord;
@@ -72,13 +71,13 @@ public class GrilleMorceau {
 	// Prépare une chaine affichant la complexité du morceau dans les 12
 	// transpositions
 	public String calculeLes12Complexites() {
-		String ChaineRetour = "";
+		StringBuilder chaineRetour = new StringBuilder();
 		for (int i = 1; i < 12; i++) {
 			this.transpose(1);
-			ChaineRetour = ChaineRetour + "[" + i + "]" + complexiteGrille() + "-";
+			chaineRetour.append("[" + i + "]" + complexiteGrille() + "-");
 		}
 		this.transpose(1);
-		return ChaineRetour;
+		return chaineRetour.toString();
 	}
 
 	// Donne un score de complexité du morceau = somme de la difficulté des
@@ -100,7 +99,6 @@ public class GrilleMorceau {
 
 	// Transpose le morceau du nombre de demi-tons
 	public void transpose(int demiTons) {
-		// Position maPosition;
 		if (demiTons ==0)
 			return;
 		for (Accord monAccord : pileDeAccords) {
@@ -110,13 +108,13 @@ public class GrilleMorceau {
 
 	// Pour afficher le morceau en mode graphique,
 	// précisant le nombre d'accords par ligne
-	public void AfficheMorceau(Graphics g, int accordsParLigne, int x, int y, int maTaillex, int maTailley) {
-		Accord monAccord = new Accord("C");
-		Position maPosition = new Position(0, 0, 0, 0);
+	public void afficheMorceau(Graphics g, int accordsParLigne, int x, int y, int maTaillex, int maTailley) {
+		Accord monAccord;
+		Position maPosition;
 		int col = 0;
 		int ligne = 0;
-		String maChaine = new String();
-		Diagramme monDiagramme = new Diagramme(g, x, y, maTaillex, maTailley);
+		String maChaine;
+		Diagramme monDiagramme;
 		g.clearRect(x, y - maTailley / 2, accordsParLigne * (maTaillex + maTaillex / 2),
 				(1 + taillePaquet() / accordsParLigne) * (maTailley + maTailley / 2));
 
@@ -165,11 +163,11 @@ public class GrilleMorceau {
 
 	@Override
 	public String toString() {
-		String maChaine = "";
+		StringBuilder maChaine = new StringBuilder();
 		for (Accord monAccord : pileDeAccords) {
-			maChaine += monAccord.nomAbrege() + " ";
+			maChaine.append (monAccord.nomAbrege() + " ");
 		}
-		return maChaine;
+		return maChaine.toString();
 	}
 
 	// Procédure de test

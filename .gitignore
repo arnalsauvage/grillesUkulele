@@ -6,3 +6,4 @@ code_samples/.settings/*
 *.swp
 .idea/
 grillesUkulele.iml
+out/

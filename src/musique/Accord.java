@@ -1,5 +1,6 @@
 package musique;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -15,9 +16,8 @@ import java.util.Arrays;
 // DONE : proposer l'enregistrement dans un fichier texte
 // DONE : proposer la lecture depuis un fichier texte
 
-public class Accord {
-
-	// static AccordNomFamille dicoAccords = new AccordNomFamille();
+public class Accord implements Serializable {
+	private static final long serialVersionUID = 360486599144774431L;
 	private NoteNom fondamentale; // Fondamentale de l'accord, ex: "C" pour do
 	// majeur 4è octave
 	private ArrayList<Integer> degres; // Degrés des accords, exemple 1,5,8 pour
@@ -25,9 +25,9 @@ public class Accord {
 
 	// Constructeur avec une noteNom fondamentale et des degrés en entrée
 	// Testé dans la méthode main de cette classe
-	public Accord(NoteNom maFondamentale, int[] mesDegres) {
+	public Accord(NoteNom maFondamentale, Integer[] mesDegres) {
 		fondamentale = new NoteNom(maFondamentale.getNom());
-		degres = new ArrayList<Integer>(mesDegres.length);
+		degres = new ArrayList<>(mesDegres.length);
 		setDegres(mesDegres);
 	}
 
@@ -41,7 +41,7 @@ public class Accord {
 			nomFondamentale = nom.substring(0, 1).toUpperCase();
 		else {
 			// On gère les # et les bémols (b)
-			if (nom.substring(1, 2).equals("#") || nom.substring(1, 2).toUpperCase().equals("B"))
+			if (nom.substring(1, 2).equals("#") || nom.substring(1, 2).equalsIgnoreCase("B"))
 				nomFondamentale = nom.substring(0, 2);
 			else
 				nomFondamentale = nom.substring(0, 1);
@@ -52,8 +52,6 @@ public class Accord {
 			description = nom.substring(nomFondamentale.length());
 
 		degres = AccordNomFamille.getDegres(description);
-		if ((degres == null))
-			degres = new ArrayList<Integer>();
 		if (degres.isEmpty())
 			degres.add(1);
 	}
@@ -62,20 +60,21 @@ public class Accord {
 	// Testé dans la méthode main de cette classe
 	public Accord(Accord monAccord) {
 		fondamentale = new NoteNom(monAccord.fondamentale.getNom());
-		degres = new ArrayList<Integer>(monAccord.degres.size());
+		degres = new ArrayList<>(monAccord.degres.size());
 		setDegres(monAccord);
 	}
 
 	// Méthode d'affichage de l'accord en console pour tests
 	public String toString() {
 		Note maNote;
-		String chaine = "Accord : " + this.chercheTypeAccord(true) + " - ";
+		StringBuilder chaineAffichee = new StringBuilder();
+		chaineAffichee.append( "Accord : " + this.chercheTypeAccord(true) + " - ");
 
 		for (int i = 0; i < degres.size(); i++) {
 			maNote = calculeNote(i);
-			chaine += maNote.getNom() + maNote.getOctave() + " ";
+			chaineAffichee.append( maNote.getNom() + maNote.getOctave() + " ");
 		}
-		return (chaine + "\t");
+		return (chaineAffichee.toString() + "\t");
 	}
 
 	// On va chercher pour chaque renversement le/les nom(s) de l'accord
@@ -90,7 +89,7 @@ public class Accord {
 				chaine = rajoute(chaine, copieAccord.nomAbrege(), ";");
 			}
 			copieAccord.renverseAccord();
-			if ((tousLesAccords == false) && (chaine.length() > 0))
+			if ((!tousLesAccords) && (chaine.length() > 0))
 				return chaine;
 		}
 		return chaine;
@@ -125,30 +124,29 @@ public class Accord {
 	}
 
 	// Simplifie un accord en supprimant les notes présentes à deux octaves
-	// différentes, on ne garde que l'octave inférieur
+	// différentes, on ne garde que la note à l'octave inférieur
 	// Testé dans la méthode main de cette classe
 	public void simplifie() {
-		// Comme les degrés sont classés par odre croissant, on part du haut
-		for (int i = degres.size() - 1; i > 0; i--)
-			// Si on trouve en dessous un degré valant même note,
-			for (int j = i - 1; j >= 0; j--) {
-				if (degres.get(i) == degres.get(j)%12) {
-					// On supprime le degré en cours
-					degres.remove(i--);
-					j = i - 1;
+		// les degrés sont classés par odre croissant
+		for (int indiceDegreBaseParcours = 0; indiceDegreBaseParcours < degres.size(); indiceDegreBaseParcours++)
+			// Si on trouve au dessus un degré valant même note,
+			for (int indiceDegresParcoursSup =indiceDegreBaseParcours + 1; indiceDegresParcoursSup < degres.size(); indiceDegresParcoursSup++) {
+				if (degres.get(indiceDegreBaseParcours) == degres.get(indiceDegresParcoursSup)%12) {
+					// On supprime ce degré en cours
+					degres.remove(indiceDegresParcoursSup );
 				}
 			}
 	}
 
 	// compare les degrés de l'accord avec un tableau de degrés
 	// Testé dans la méthode main de cette classe
-	public boolean equals(int[] tabDegres) {
+	public boolean equals(Integer[] tabDegres) {
 		// Si différence de taille : on renvoie faux
 		if (tabDegres.length != degres.size())
 			return false;
 		// Si différence d'un element : on renvoie faux
 		for (int i = 0; i < degres.size(); i++)
-			if (degres.get(i) != tabDegres[i])
+			if (!degres.get(i).equals(tabDegres[i]))
 				return false;
 		// Sinon on renvoie vrai
 		return true;
@@ -176,20 +174,22 @@ public class Accord {
 		if (fondamentale == null) {
 			if (other.fondamentale != null)
 				return false;
-		} else if (!fondamentale.equals(other.fondamentale))
+		} else if (!fondamentale.equals(other.fondamentale)) {
 			return false;
+		}
 		
 		if (degres == null) {
 			if (other.degres != null)
 				return false;
-		} else if (!this.degres.equals(other.degres))
+		} else if (!this.degres.equals(other.degres)) {
 			return false;
+		}
 		return true;
 	}
 
 	// initialise les degrés avec un tableau d'entiers
 	// Testé via les appels aux constructeurs
-	public void setDegres(int[] tabDegres) {
+	public void setDegres(Integer[] tabDegres) {
 		// on vide notre tableau
 		degres.clear();
 		// On trie le tableau passé en paramètre
@@ -197,6 +197,7 @@ public class Accord {
 		// On ajoute tous les composants un par un
 		for (int i = 0; i < tabDegres.length; i++)
 			degres.add(tabDegres[i]);
+//		degres = new ArrayList<>(Arrays.asList(tabDegres));
 		// On "tasse" le tableau sur une base de 1
 		tasse();
 	}

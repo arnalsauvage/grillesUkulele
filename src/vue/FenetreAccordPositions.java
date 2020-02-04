@@ -1,10 +1,8 @@
 package vue;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import musique.AccordNomFamille;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -20,7 +18,7 @@ public class FenetreAccordPositions extends JFrame implements ActionListener {
 	}
 
 	public void init() {
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		this.setContentPane(monPanPosition);
 		this.setSize(800, 600);
@@ -32,16 +30,15 @@ public class FenetreAccordPositions extends JFrame implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		// Rien pour le moment
 	}
 
 	public void mouseReleased(MouseEvent e){
-	// TODO Auto-generated method stub
+	// Rien pour le moment
 		
 	} 
 	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		AccordNomFamille.creeCatalogueAccords();
 		FenetreAccordPositions fen;
 

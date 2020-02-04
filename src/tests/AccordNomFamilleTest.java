@@ -3,6 +3,9 @@ package tests;
 import musique.AccordNomFamille;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import static org.junit.Assert.assertEquals;
 
 public class AccordNomFamilleTest {
@@ -41,10 +44,10 @@ public class AccordNomFamilleTest {
 	@Test
 	// Teste la fonction getNom
 	public void testeGetNomFamille() {
-		Integer[] powerChord = { 1, 8 };
-		Integer[] accordMajeur = { 1, 5, 8 };
-		Integer[] accordMajeurAugmente = { 1, 5, 9 };
-		Integer[] accordMajeur6 = { 1, 5, 8, 10 };
+		ArrayList<Integer> powerChord = new ArrayList (Arrays.asList( 1, 8 ));
+		ArrayList<Integer> accordMajeur = new ArrayList (Arrays.asList( 1, 5, 8 ));
+		ArrayList<Integer> accordMajeurAugmente = new ArrayList (Arrays.asList( 1, 5, 9 ));
+		ArrayList<Integer> accordMajeur6 = new ArrayList (Arrays.asList( 1, 5, 8, 10));
 
 //		AccordNomFamille.creeCatalogueAccords();
 		AccordNomFamille monANF = new AccordNomFamille();
@@ -60,7 +63,6 @@ public class AccordNomFamilleTest {
 
 		monANF.setDegres(accordMajeur6);
 		assertEquals("6",AccordNomFamille.getNomFamille(monANF.getDegres()));
-
 	}
 
 	@Test
