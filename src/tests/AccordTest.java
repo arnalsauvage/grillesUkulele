@@ -308,7 +308,7 @@ public class AccordTest {
 		// C Eb G  ==> C Eb G
 		 maNote = new NoteNom("Cm");
 		 monAccord = new Accord (maNote, new Integer[]{1, 4, 8});
-		 monAccord.simplifie();
+		 monAccordSimplifie = new Accord (maNote, new Integer[]{1, 4, 8});
 		 assertEquals(monAccordSimplifie, monAccord);
 
 		// C Eb G Bb C ==> C Eb G Bb

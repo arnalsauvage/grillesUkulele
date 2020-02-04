@@ -4,14 +4,15 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Dico implements Serializable {
 	private static final long serialVersionUID = 6048244558074728131L;
-	HashMap<String, Position> leDico;
+	private final AtomicReference<HashMap<String, Position>> leDico = new AtomicReference<>();
 
 	// Constructeur
 	public Dico() {
-		leDico = new HashMap<>();
+		leDico.set(new HashMap<>());
 	}
 
 	// Renvoie la position pour un accord décrit par une chaîne
@@ -21,26 +22,26 @@ public class Dico implements Serializable {
 			Accord monAccord =new Accord(cle);
 			cle = monAccord.ecritEnDiese();
 		}
-		if (leDico.containsKey(cle))
-			return leDico.get(cle);
+		if (leDico.get().containsKey(cle))
+			return leDico.get().get(cle);
 		else
 			return null;
 	}
 	
 	public int getSize()
 	{
-		return leDico.size();
+		return leDico.get().size();
 	}
 
 	// Supprime une entrée du dico
 	public void supprime(String cle) {
-		if (leDico.containsKey(cle))
-			leDico.remove(cle);
+		if (leDico.get().containsKey(cle))
+			leDico.get().remove(cle);
 	}
 
 	// Ecrit / remplace une entrée dans le dico
 	public void remplace(String cle, Position maPosition) {
-		leDico.put(cle, maPosition);
+		leDico.get().put(cle, maPosition);
 	}
 
 	// On ajoute l'accord au dico s'il est plus simple que l'existant
@@ -50,12 +51,12 @@ public class Dico implements Serializable {
 		if (nom.length() == 0 || laPosition == null)
 			return;
 
-		autrePosition = leDico.get(nom);
+		autrePosition = leDico.get().get(nom);
 		if (autrePosition == null)
-			leDico.put(nom, laPosition);
+			leDico.get().put(nom, laPosition);
 		else {
 			if (autrePosition.difficulte() > laPosition.difficulte()) {
-				leDico.put(nom, laPosition);
+				leDico.get().put(nom, laPosition);
 			}
 		}
 	}
@@ -101,7 +102,7 @@ public class Dico implements Serializable {
 	public void afficheConsole() {
 		Position laPosition;
 		String snom;
-		Set<String> set = leDico.keySet();
+		Set<String> set = leDico.get().keySet();
 
 		Iterator<String> itr = set.iterator();
 		while (itr.hasNext()) {

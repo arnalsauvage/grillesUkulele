@@ -1,7 +1,9 @@
 package musique;
 
-public class NoteNom {
+import java.io.Serializable;
 
+public class NoteNom implements Serializable {
+    private static final long serialVersionUID = 5282034698600789061L;
     private String nomDeLaNote; // ex : A, B, C#, DB
     private int valeurDeLaNote; // 1 pour C , 2 pour C#, 3 pour D etc
 
@@ -68,7 +70,6 @@ public class NoteNom {
     }
 
     private void calculeNumero() {
-        // ecritEnDiese();
         switch (nomDeLaNote) {
             case "C":
                 valeurDeLaNote = 1;
@@ -185,11 +186,10 @@ public class NoteNom {
         } else if (!nomDeLaNote.equals(other.nomDeLaNote)) {
             return false;
         }
+        Boolean bRetour = true;
         if (valeurDeLaNote != other.valeurDeLaNote) {
-            return false;
+            bRetour = false;
         }
-        return true;
+        return bRetour;
     }
-
-
 }

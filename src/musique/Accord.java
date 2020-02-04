@@ -18,7 +18,7 @@ import java.util.Arrays;
 
 public class Accord implements Serializable {
 	private static final long serialVersionUID = 360486599144774431L;
-	private NoteNom fondamentale; // Fondamentale de l'accord, ex: "C" pour do
+	private NoteNom fondamentale = new NoteNom("C"); // Fondamentale de l'accord, ex: "C" pour do
 	// majeur 4è octave
 	private ArrayList<Integer> degres; // Degrés des accords, exemple 1,5,8 pour
 	// accord majeur
